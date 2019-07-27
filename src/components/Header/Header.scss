@@ -1,0 +1,16 @@
+@import '~bootstrap/scss/bootstrap.scss';
+
+.nav-link--white{
+  color: white;
+}
+
+.border-bottom--2{
+  @extend .border-bottom;
+  border-width: 2px !important;
+}
+
+.logo {
+  width: 140px;
+  height: 30px;
+  background: url('../../assets/img/logo.png') no-repeat 0 ;
+}
