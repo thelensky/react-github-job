@@ -6,7 +6,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 
 interface IJobsListProps extends RouteComponentProps {
   jobs: IJob[];
-  activeJobs: (amount: number) => void;
+  lengthListOfJobs: (amount: number) => void;
 }
 
 interface ISearchParams {
@@ -40,7 +40,7 @@ const JobsList: React.FunctionComponent<IJobsListProps> = props => {
   });
 
   React.useEffect(() => {
-    props.activeJobs(filteredJob.length)
+    props.lengthListOfJobs(filteredJob.length)
   })
 
   return (

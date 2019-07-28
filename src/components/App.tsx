@@ -56,20 +56,23 @@ const AppRouter: React.FC<IAppRouterProps> = props => {
       <Switch>
         <div className='container mb-3'>
           <Route exact={true} path='/positions' component={FormSearch} />
-          <Route
-            path='/proposition'
-            // tslint:disable-next-line: jsx-no-lambda
-            component={() => {
-              return (
-                <button
-                  className='btn btn-link font-weight-bold small'
-                  onClick={() => props.history.goBack()}
-                >
-                  Go back
-                </button>
-              );
-            }}
-          />
+          {['/proposition', '/companies'].map(route => (
+            <Route
+              key={route}
+              path={`${route}`}
+              // tslint:disable-next-line: jsx-no-lambda
+              component={() => {
+                return (
+                  <button
+                    className='btn btn-link font-weight-bold small'
+                    onClick={() => props.history.goBack()}
+                  >
+                    Go back
+                  </button>
+                );
+              }}
+            />
+          ))}
         </div>
       </Switch>
 

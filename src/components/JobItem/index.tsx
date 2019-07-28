@@ -18,9 +18,9 @@ const JobItem: React.FunctionComponent<IJobItem> = props => {
         </h6>
         <p className='text-black-50'>
           {/* TODO find all proposition this company  "/company/:name" -> list of propsitions */}
-          <a className='text-black-50' href='#'>
+          <Link to={`/companies/${props.job.company}`} className='text-black-50' >
             {props.job.company}{' '}
-          </a>
+          </Link>
           {' – '}
           <span className='text-success font-weight-bold'>
             {props.job.type}

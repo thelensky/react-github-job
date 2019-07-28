@@ -13,6 +13,7 @@ const JobPage: React.FC<IJobPageProps> = props => {
     if (props.match.params && props.match.params.id) {
       props.handleId(props.match.params.id);
     }
+    window.scrollTo(0, 0)
   });
 
   return (

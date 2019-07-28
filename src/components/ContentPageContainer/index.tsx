@@ -7,6 +7,7 @@ import Sidbar from '../Sidbar';
 import { IJob } from '../../JobsData';
 import JobsList from '../JobsList';
 import Title from '../Title';
+import Pagination from '../Pagination';
 
 interface IRoutes {
   path: string;
@@ -18,23 +19,38 @@ interface IRoutes {
 
 interface IContentPageState {
   job: IJob | null;
-  showingJobs: number;
+  lengthListOfJobs: number;
 }
 
 interface IContentPageProps {
   jobs: IJob[];
 }
 
-class ContentPage extends React.PureComponent<IContentPageProps, IContentPageState> {
+class ContentPage extends React.PureComponent<
+  IContentPageProps,
+  IContentPageState
+> {
   public routes: IRoutes[] = [
     {
       path: '/positions',
       main: () => {
         return (
-          <JobsList jobs={this.props.jobs} activeJobs={this.setShowingJobs} />
+          <>
+            <JobsList
+              jobs={this.props.jobs}
+              lengthListOfJobs={this.setlengthListOfJobs}
+            />
+            <Pagination
+              lengthOfList={this.state.lengthListOfJobs}
+              divider={50}
+              activePage={1}
+            />
+          </>
         );
       },
-      header: () => <Title title={`Showing ${this.state.showingJobs} jobs`} />
+      header: () => (
+        <Title title={`Showing ${this.state.lengthListOfJobs} jobs`} />
+      )
     },
     {
       path: '/proposition/:id',
@@ -53,15 +69,39 @@ class ContentPage extends React.PureComponent<IContentPageProps, IContentPageSta
             `${this.state.job.type} / ${this.state.job.location}`
           }
         />
-      )
+      ),
+      sidebar: () => <Sidbar content={this.state.job} />
+    },
+    {
+      path: '/companies/:company',
+      main: (routProps: RouteComponentProps<{ company: string }>) => {
+        const companyJobs = this.props.jobs.filter(
+          job => job.company === routProps.match.params.company
+        );
+        this.setState({ job: companyJobs[0] });
+        return (
+          <JobsList
+            jobs={companyJobs}
+            lengthListOfJobs={this.setlengthListOfJobs}
+          />
+        );
+      },
+      header: (routProps: RouteComponentProps<{ company: string }>) => (
+        <Title
+          title={`Showing ${this.state.lengthListOfJobs} jobs at ${routProps.match.params.company}`}
+        />
+      ),
+      sidebar: (routProps: RouteComponentProps<{ company: string }>) => {
+        return <Sidbar content={this.state.job} />;
+      }
     }
   ];
 
-  constructor(props: IContentPageProps ) {
+  constructor(props: IContentPageProps) {
     super(props);
     this.state = {
       job: null,
-      showingJobs: 0,
+      lengthListOfJobs: 0
     };
   }
 
@@ -96,7 +136,15 @@ class ContentPage extends React.PureComponent<IContentPageProps, IContentPageSta
               </div>
               {/* sidebar */}
               <div className='col-4 px-4 py-1'>
-                <Sidbar content={null} />
+                <Switch>
+                  {this.routes.map((route, index) => (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      component={route.sidebar}
+                    />
+                  ))}
+                </Switch>
               </div>
             </div>
           </div>
@@ -114,8 +162,8 @@ class ContentPage extends React.PureComponent<IContentPageProps, IContentPageSta
     }
   };
 
-  private setShowingJobs = (amount: number) => {
-    this.setState({ showingJobs: amount });
+  private setlengthListOfJobs = (amount: number) => {
+    this.setState({ lengthListOfJobs: amount });
   };
 }
 

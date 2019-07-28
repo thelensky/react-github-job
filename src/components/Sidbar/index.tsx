@@ -17,6 +17,7 @@ const Sidbar: React.FunctionComponent<ISidebarProps> = props => {
           <div className='card-body'>
             {content && content.company_logo && (
               <img
+                key={content.company_logo}
                 className='img-fluid img-thumbnail mb-1'
                 src={content.company_logo}
                 alt=''
